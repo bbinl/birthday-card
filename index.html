@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>শুভ জন্মদিন!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f8cdda, #1d2b64);
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      touch-action: manipulation;
+    }
+    .card {
+      text-align: center;
+      padding: 1.5rem;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      max-width: 90%;
+      width: 100%;
+      box-shadow: 0 0 20px #fff3;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeIn 1s forwards;
+      margin: 1rem;
+      box-sizing: border-box;
+    }
+    h1 { 
+      font-size: 1.5em; 
+      margin: 0.5em 0;
+    }
+    p { 
+      font-size: 1em;
+      line-height: 1.4;
+    }
+    button {
+      margin: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff80ab;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      min-width: 120px;
+      display: inline-block;
+    }
+    button:hover, button:active { 
+      background-color: #ff4081; 
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .confetti, .balloon {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: yellow;
+      animation: fall 3s linear infinite;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-20px); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+    .balloon {
+      width: 25px;
+      height: 25px;
+      background-color: red;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: floatUp 5s ease-in infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+    }
+
+    canvas {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+      max-width: 100%;
+    }
+
+    #cakePage img {
+      max-width: 80%;
+      height: auto;
+      margin-top: 15px;
+    }
+
+    #wishPage {
+      background: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2Z0bGx2aHhncjJsaHJ2NjFtcWFmNzNoNnE0emRjcHVra3g4d3RhbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vgAAcpg0UIYzNizQWf/giphy.gif') no-repeat center center;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    /* Popup styles */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.5s;
+    }
+    .popup-content {
+      background-color: #ff80ab;
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255,255,255,0.3);
+      transform: scale(0.9);
+      animation: popIn 0.5s 0.5s forwards;
+      cursor: pointer;
+    }
+    .popup-content h2 {
+      margin: 0;
+      font-size: 1.8em;
+      color: white;
+    }
+    @keyframes popIn {
+      to { transform: scale(1); }
+    }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 480px) {
+      h1 { font-size: 1.3em; }
+      p { font-size: 0.9em; }
+      button { 
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9em;
+      }
+      .card { padding: 1rem; }
+      .popup-content {
+        padding: 1.5rem;
+        width: 80%;
+      }
+      .popup-content h2 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" src="https://raw.githubusercontent.com/bbinl/birthday-card/main/happy-birthday.mp3" loop></audio>
+  <canvas id="treeCanvas" width="300" height="300"></canvas>
+
+  <!-- Popup for music -->
+  <div id="popup" class="popup-overlay">
+    <div class="popup-content" onclick="startMusic()">
+      <h2>🎵 Touch Me</h2>
+      <p>মিউজিক প্লে করতে এখানে টাচ করুন</p>
+    </div>
+  </div>
+
+  <div class="card" id="page">
+    <h1>🌺 Shafia Sultana (Sonaly) 🌺 আপনার জন্য একটি সারপ্রাইজ গিফট আছে!</h1>
+    <p>>> close your eyes 🙈 and go next >></p>
+    <button onclick="nextPage()">Next</button>
+  </div>
+
+  <script>
+    let page = 1;
+    const pageDiv = document.getElementById("page");
+    const canvas = document.getElementById("treeCanvas");
+    const ctx = canvas.getContext("2d");
+    let treeHeight = 20;
+    const music = document.getElementById("bgMusic");
+    const popup = document.getElementById("popup");
+
+    // Function to start music and hide popup
+    function startMusic() {
+      music.play()
+        .then(() => {
+          popup.style.display = "none";
+        })
+        .catch(error => {
+          popup.querySelector('h2').textContent = "❌ সমস্যা হয়েছে";
+          popup.querySelector('p').textContent = "মিউজিক প্লে করতে ট্রাই আবার করুন";
+          console.error("Audio playback failed:", error);
+        });
+    }
+
+    function nextPage() {
+      pageDiv.classList.remove("card");
+      void pageDiv.offsetWidth;
+      pageDiv.classList.add("card");
+      growTree();
+      createBalloons();
+
+      if (page === 1) {
+        pageDiv.innerHTML = `
+          <div id="cakePage">
+            <h1>🎂 সারপ্রাইজ কেক!</h1>
+            <p> মোমবাতি ফু দিলে নিভে যাবে 🌬 </p>
+            <img id="cakeImg" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDQ0OW5kODdiMWxqM21uZGt3dHdxd2p5bDVscWJ0dHplN2M3OG5sNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5n0vwgi1ejJ115txfC/giphy.gif" alt="cake with candle" />
+          </div>
+        `;
+        setTimeout(() => {
+          page++;
+          nextPage();
+        }, 4000);
+      } else if (page === 2) {
+        pageDiv.setAttribute("id", "wishPage");
+        pageDiv.innerHTML = `
+          <h1 style="margin-top: 100px; background-color: rgba(0,0,0,0.5); padding: 1rem; border-radius: 10px;">🎉 শুভ জন্মদিন!</h1>
+          <p style="background-color: rgba(0,0,0,0.5); padding: 1rem; border-radius: 10px; max-width: 90%;">
+            Shafia Sultana (Sonaly), আজকের দিন আপনার, <br>
+আনন্দে কাটুক সময়, থাকুক সুখের ভার। <br>
+হাসিমুখে থাকুন আপনি, থাকুক প্রাণে ছন্দ, <br>
+নতুন বছরে খুলুক সফলতার বন্ধ। <br>
+<br>
+আকাশের তারা যেন আলো দেয় সবপথে, <br>
+সত্য আর শান্তি থাকুক আপনার জীবনের রথে। <br>
+এই কামনাই করি আজ, জন্মদিনে হেসে,<br>
+আপনি এগিয়ে যান সদা, ভালো থাকুন বেশে। 
+          </p>
+        `;
+        growTree();
+        startConfetti();
+      }
+    }
+
+    function growTree() {
+      treeHeight += 20;
+      drawTree();
+    }
+
+    function drawTree() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#8B4513";
+      ctx.fillRect(140, 300 - treeHeight, 20, treeHeight);
+      ctx.beginPath();
+      ctx.arc(150, 300 - treeHeight, 40, 0, Math.PI * 2);
+      ctx.fillStyle = "green";
+      ctx.fill();
+    }
+
+    function createBalloons() {
+      for (let i = 0; i < 6; i++) {
+        let balloon = document.createElement("div");
+        balloon.className = "balloon";
+        balloon.style.left = Math.random() * 100 + "%";
+        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 5000);
+      }
+    }
+
+    function startConfetti() {
+      for (let i = 0; i < 100; i++) {
+        let confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "%";
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    // Adjust canvas size for mobile
+    function resizeCanvas() {
+      const size = Math.min(300, window.innerWidth * 0.8);
+      canvas.width = size;
+      canvas.height = size;
+      drawTree();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    drawTree();
+  </script>
+</body>
+</html>
